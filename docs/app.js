@@ -1124,6 +1124,29 @@ window.addEventListener('beforeunload', function(e){
    without it, so the published artifact keeps working on localStorage alone. */
 window.UDESK = {
   getState: function(){ return S; },
+  /* what the feedback widget reports, so a note like "this one looks wrong"
+     arrives with the question id already attached */
+  context: function(){
+    var r = readiness();
+    var screen;
+    if(mode === 'drill' && drill.queue.length && drill.i < drill.queue.length){
+      var cq = drill.queue[drill.i].q;
+      screen = 'Drill \u2014 ' + DMAP[cq.d].short + ' (question ' + cq.id + ')';
+    } else if(mode === 'exam' && exam.live){
+      var eq = exam.qs[exam.i].q;
+      screen = 'Mock exam, q' + (exam.i + 1) + ' of ' + exam.qs.length + ' (question ' + eq.id + ')';
+    } else {
+      var m = MODES.filter(function(x){ return x.k === mode; })[0];
+      screen = m ? m.label : mode;
+    }
+    var w = priorities().filter(function(x){ return x.s.pct !== null; })[0];
+    return {
+      screen: screen,
+      projected: r.pct === null ? null : Math.round(r.pct * EXAM_SCORED),
+      weakest: w ? w.d.short + ' (' + Math.round(w.s.pct * 100) + '%)' : null,
+      answered: r.answered
+    };
+  },
   setState: function(next){ if(next) S = next; save(); renderRail(); render(); },
   rerender: function(){ renderRail(); render(); },
   onSyncChange: function(st){ renderAccount(st); }

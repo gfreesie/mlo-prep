@@ -91,6 +91,7 @@ ${fontLinks}
 <body>
 ${body}
 ${bankTags.map((b) => `<script src="${b}"></script>`).join("\n")}
+<script src="feedback.js"></script>
 ${STATIC ? "" : '<script src="sync.js"></script>'}
 <script src="app.js"></script>
 </body>
@@ -100,6 +101,7 @@ ${STATIC ? "" : '<script src="sync.js"></script>'}
 writeFileSync(join(dist, "index.html"), html, "ascii");
 writeFileSync(join(dist, "app.css"), reset + css, "ascii");
 writeFileSync(join(dist, "app.js"), appJs, "ascii");
+copyFileSync(join(root, "feedback.js"), join(dist, "feedback.js"));
 if (!STATIC) copyFileSync(join(root, "sync.js"), join(dist, "sync.js"));
 for (const b of bankTags) copyFileSync(join(root, b), join(dist, b));
 writeFileSync(join(dist, "robots.txt"), STATIC ? "User-agent: *\nAllow: /\n" : "User-agent: *\nDisallow: /\n", "ascii");

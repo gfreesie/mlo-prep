@@ -71,6 +71,31 @@ derive mastery — so the client and server can never disagree about the rules.
 
 See [DEPLOY.md](DEPLOY.md). GitHub Pages cannot run it; it needs a real server.
 
+## Feedback widget
+
+There is a feedback popout on every screen. Notes are queued in `localStorage`
+first and flushed on send, so nothing is lost if the reader is offline - or if
+the endpoint below has not been set yet, in which case the queue drains on their
+next visit once it has.
+
+To receive them, set one line in `feedback.js`:
+
+```js
+var ENDPOINT = "https://formspree.io/f/xxxxxxx";
+```
+
+1. Sign up at [formspree.io](https://formspree.io) and create a form.
+2. Copy the endpoint URL it gives you into `ENDPOINT`.
+3. `npm run build:pages`, then commit and push.
+
+Each note arrives with the screen the reader was on (including the question id
+if they were mid-drill), their projected score, weakest domain, and browser -
+so "this one looks wrong" is actionable without a round trip. The panel says so
+plainly rather than collecting it quietly.
+
+Swapping to a different service means changing that URL and the field names in
+`flush()`; nothing else in the widget knows where notes go.
+
 ## Layout
 
 ```
@@ -78,6 +103,7 @@ index.html        the whole app - markup, styles and logic in one file
 bank-*.js         500 questions + 52 flashcards
 build.mjs         wraps index.html into a standalone document
 docs/             static build (GitHub Pages serves this)
+feedback.js       feedback popout; one constant decides where notes go
 sync.js           offline-first sync client, self-hosted build only
 server/           Express + SQLite API
 deploy/           provisioning and deploy scripts for a VPS
