@@ -1,0 +1,1613 @@
+<title>The Underwriting Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --paper:#F2F3F0;
+  --raised:#FBFBFA;
+  --sunk:#E9EBE6;
+  --ink:#1A1E1B;
+  --ink-soft:#5B625C;
+  --ink-faint:#868D86;
+  --rule:#D2D7D1;
+  --rule-hard:#B6BDB5;
+  --accent:#8C2F2A;
+  --accent-wash:#F2E4E2;
+  --pass:#2C6E4B;
+  --pass-wash:#E2ECE5;
+  --warn:#8A6118;
+  --warn-wash:#F2EADA;
+  --shadow:0 1px 2px rgba(26,30,27,.07), 0 6px 18px -10px rgba(26,30,27,.22);
+
+  --f-display:'Spectral', Georgia, 'Times New Roman', serif;
+  --f-body:'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --f-mono:'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141613;
+    --raised:#1D211E;
+    --sunk:#101310;
+    --ink:#E8EAE5;
+    --ink-soft:#99A09A;
+    --ink-faint:#737A74;
+    --rule:#2F3531;
+    --rule-hard:#434A45;
+    --accent:#D9635A;
+    --accent-wash:#331D1B;
+    --pass:#5FB287;
+    --pass-wash:#16281F;
+    --warn:#D3A24E;
+    --warn-wash:#2B2314;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px -10px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141613;
+  --raised:#1D211E;
+  --sunk:#101310;
+  --ink:#E8EAE5;
+  --ink-soft:#99A09A;
+  --ink-faint:#737A74;
+  --rule:#2F3531;
+  --rule-hard:#434A45;
+  --accent:#D9635A;
+  --accent-wash:#331D1B;
+  --pass:#5FB287;
+  --pass-wash:#16281F;
+  --warn:#D3A24E;
+  --warn-wash:#2B2314;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px -10px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important; transition:none!important}}
+
+.wrap{max-width:860px; margin:0 auto; padding:0 20px 80px}
+
+/* ---- masthead ---- */
+.masthead{
+  border-bottom:1px solid var(--rule-hard);
+  background:var(--raised);
+  position:sticky; top:0; z-index:20;
+}
+.masthead-in{
+  max-width:860px; margin:0 auto; padding:14px 20px 0;
+  display:flex; flex-direction:column; gap:12px;
+}
+.brandrow{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.brand{font-family:var(--f-display); font-size:22px; font-weight:700; letter-spacing:-.01em; line-height:1.1}
+.brand em{font-style:italic; font-weight:400; color:var(--accent)}
+.brand-sub{
+  font-family:var(--f-mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--ink-faint); white-space:nowrap;
+}
+.rail{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.rail button{
+  appearance:none; background:none; border:0; border-bottom:2px solid transparent;
+  font-family:var(--f-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-soft); padding:9px 13px 10px; cursor:pointer; white-space:nowrap;
+}
+.rail button:hover{color:var(--ink)}
+.rail button[aria-current="true"]{color:var(--accent); border-bottom-color:var(--accent)}
+.rail .tag{
+  font-size:9.5px; background:var(--accent); color:var(--paper); border-radius:100px;
+  padding:1px 6px; margin-left:5px; letter-spacing:.04em; vertical-align:1px;
+}
+
+/* ---- shared type ---- */
+h2.sec{
+  font-family:var(--f-display); font-size:25px; font-weight:600; letter-spacing:-.012em;
+  margin:0; text-wrap:balance;
+}
+.eyebrow{
+  font-family:var(--f-mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--ink-faint); margin:0 0 6px;
+}
+.lede{color:var(--ink-soft); max-width:62ch; margin:8px 0 0}
+.num{font-family:var(--f-mono); font-variant-numeric:tabular-nums}
+.stack{display:flex; flex-direction:column; gap:26px; padding-top:28px}
+
+/* ---- ledger ---- */
+.ledger{border-top:1px solid var(--rule-hard); margin-top:18px}
+.lrow{
+  display:grid; grid-template-columns:1fr minmax(120px,1.4fr) 62px;
+  gap:14px; align-items:center;
+  padding:11px 0; border-bottom:1px solid var(--rule);
+}
+.lname{display:flex; flex-direction:column; gap:1px; min-width:0}
+.lname b{font-weight:600; font-size:14px; line-height:1.25}
+.lname span{font-family:var(--f-mono); font-size:10.5px; color:var(--ink-faint); letter-spacing:.04em}
+.track{position:relative; height:9px; background:var(--sunk); border-radius:1px; overflow:hidden}
+.fill{position:absolute; inset:0 auto 0 0; background:var(--ink-faint); border-radius:1px}
+.fill.good{background:var(--pass)}
+.fill.mid{background:var(--warn)}
+.fill.bad{background:var(--accent)}
+.passline{position:absolute; top:-3px; bottom:-3px; width:1px; background:var(--ink); left:75%; opacity:.55}
+.lpct{font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:13px; text-align:right; font-weight:500}
+.lpct.dim{color:var(--ink-faint); font-weight:400}
+
+/* ---- readout ---- */
+.readout{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px;
+  background:var(--rule); border:1px solid var(--rule); margin-top:4px;
+}
+.rcell{background:var(--raised); padding:14px 15px}
+.rcell .k{font-family:var(--f-mono); font-size:10px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-faint)}
+.rcell .v{font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:27px; font-weight:500; line-height:1.15; margin-top:5px; letter-spacing:-.02em}
+.rcell .n{font-size:12px; color:var(--ink-soft); margin-top:2px}
+.v.good{color:var(--pass)} .v.mid{color:var(--warn)} .v.bad{color:var(--accent)}
+.sm{font-size:15px; color:var(--ink-faint)}
+
+/* ---- buttons ---- */
+.btn{
+  appearance:none; font-family:var(--f-body); font-size:14px; font-weight:600;
+  padding:11px 18px; border-radius:2px; cursor:pointer; border:1px solid var(--ink);
+  background:var(--ink); color:var(--paper); transition:opacity .12s;
+}
+.btn:hover{opacity:.85}
+.btn.ghost{background:transparent; color:var(--ink); border-color:var(--rule-hard)}
+.btn.ghost:hover{background:var(--sunk); opacity:1}
+.btn.mark{background:var(--accent); border-color:var(--accent); color:#fff}
+.btn.sm{font-size:12.5px; padding:7px 13px}
+.btn:disabled{opacity:.4; cursor:not-allowed}
+.btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+
+/* ---- chips ---- */
+.chips{display:flex; gap:7px; flex-wrap:wrap; margin-top:14px}
+.chip{
+  appearance:none; cursor:pointer; background:var(--raised); border:1px solid var(--rule-hard);
+  color:var(--ink); font-family:var(--f-body); font-size:12.5px; padding:6px 12px; border-radius:100px;
+}
+.chip:hover{border-color:var(--ink-faint)}
+.chip .c{font-family:var(--f-mono); font-size:10.5px; opacity:.6; margin-left:5px}
+
+/* ---- question ---- */
+.qmeta{
+  display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+  font-family:var(--f-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-faint); padding-bottom:9px; border-bottom:1px solid var(--rule-hard); flex-wrap:wrap;
+}
+.qmeta .dom{color:var(--accent)}
+.qtext{
+  font-family:var(--f-display); font-size:20px; line-height:1.42; font-weight:400;
+  margin:18px 0 20px; max-width:60ch; text-wrap:pretty;
+}
+.opts{display:flex; flex-direction:column; border-top:1px solid var(--rule)}
+.opt{
+  display:flex; gap:13px; align-items:flex-start; text-align:left; width:100%;
+  background:none; border:0; border-bottom:1px solid var(--rule);
+  padding:13px 10px 13px 4px; cursor:pointer; color:var(--ink);
+  font-family:var(--f-body); font-size:14.5px; line-height:1.5;
+}
+.opt:hover:not(:disabled){background:var(--sunk)}
+.opt:disabled{cursor:default}
+.opt .ltr{
+  flex:0 0 22px; height:22px; border:1px solid var(--rule-hard); border-radius:50%;
+  font-family:var(--f-mono); font-size:11px; display:flex; align-items:center; justify-content:center;
+  margin-top:1px; color:var(--ink-soft);
+}
+.opt.correct{background:var(--pass-wash)}
+.opt.correct .ltr{background:var(--pass); border-color:var(--pass); color:var(--paper); font-weight:600}
+.opt.wrong{background:var(--accent-wash)}
+.opt.wrong .ltr{background:var(--accent); border-color:var(--accent); color:var(--paper); font-weight:600}
+.opt.picked{box-shadow:inset 3px 0 0 var(--ink)}
+
+.why{
+  margin-top:18px; padding:15px 17px; background:var(--raised);
+  border:1px solid var(--rule); border-left:3px solid var(--accent);
+}
+.why.right{border-left-color:var(--pass)}
+.why .verdict{
+  font-family:var(--f-mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:6px; font-weight:600;
+}
+.why.right .verdict{color:var(--pass)}
+.why p{margin:0; color:var(--ink-soft); font-size:14px; line-height:1.6; max-width:64ch}
+
+.pbar{height:3px; background:var(--sunk); margin:16px 0 0; position:relative}
+.pbar i{position:absolute; inset:0 auto 0 0; background:var(--accent); display:block}
+
+.exambar{
+  display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
+  padding:11px 15px; background:var(--raised); border:1px solid var(--rule-hard);
+}
+.clock{font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:21px; font-weight:500; letter-spacing:-.01em}
+.clock.low{color:var(--accent)}
+.exambar .lab{font-family:var(--f-mono); font-size:10px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-faint)}
+
+/* ---- stamp ---- */
+.stampwrap{display:flex; justify-content:center; padding:14px 0 6px}
+.stamp{
+  font-family:var(--f-mono); font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+  font-size:15px; padding:13px 26px; border:3px double var(--accent); color:var(--accent);
+  transform:rotate(-3.5deg); text-align:center; line-height:1.35; border-radius:3px;
+}
+.stamp.ok{border-color:var(--pass); color:var(--pass)}
+.stamp small{display:block; font-size:10px; letter-spacing:.1em; opacity:.75; margin-top:3px; font-weight:400}
+
+/* ---- flashcards ---- */
+.card{
+  background:var(--raised); border:1px solid var(--rule-hard); padding:30px 26px;
+  min-height:190px; display:flex; flex-direction:column; justify-content:center;
+  cursor:pointer; box-shadow:var(--shadow);
+}
+.card .grp{font-family:var(--f-mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); margin-bottom:12px}
+.card .front{font-family:var(--f-display); font-size:23px; font-weight:600; line-height:1.3; text-wrap:balance}
+.card .back{margin-top:14px; padding-top:14px; border-top:1px solid var(--rule); color:var(--ink-soft); font-size:14.5px; line-height:1.6}
+.card .tap{font-family:var(--f-mono); font-size:10px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-faint); margin-top:16px}
+
+/* ---- reference sheet ---- */
+.sheet{margin-top:20px}
+.sgroup{margin-bottom:26px}
+.sgroup h3{
+  font-family:var(--f-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); margin:0 0 4px; padding-bottom:7px; border-bottom:1px solid var(--rule-hard);
+}
+.srow{display:grid; grid-template-columns:minmax(150px,.85fr) 1.6fr; gap:16px; padding:10px 0; border-bottom:1px solid var(--rule)}
+.srow b{font-weight:600; font-size:13.5px}
+.srow span{color:var(--ink-soft); font-size:13.5px; line-height:1.55}
+
+/* ---- study plan ---- */
+.today{
+  background:var(--raised); border:1px solid var(--rule-hard); border-top:3px solid var(--accent);
+  padding:20px 21px; margin-top:20px; box-shadow:var(--shadow);
+}
+.today .dayno{font-family:var(--f-mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--accent)}
+.today h3{font-family:var(--f-display); font-size:21px; font-weight:600; margin:5px 0 0}
+.tasks{display:flex; flex-direction:column; gap:9px; margin-top:16px}
+.task{
+  display:flex; align-items:center; gap:12px; padding:11px 13px;
+  background:var(--paper); border:1px solid var(--rule);
+}
+.task .tk{font-family:var(--f-mono); font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-faint); flex:0 0 auto}
+.task .tl{flex:1 1 auto; font-size:14px; min-width:0}
+.docket{border-top:1px solid var(--rule-hard); margin-top:26px}
+.drow{
+  display:grid; grid-template-columns:52px 1fr auto; gap:13px; align-items:center;
+  padding:10px 0; border-bottom:1px solid var(--rule);
+}
+.drow.is-today{background:var(--warn-wash); box-shadow:inset 3px 0 0 var(--accent)}
+.drow.is-past{opacity:.5}
+.drow .dd{font-family:var(--f-mono); font-size:11px; color:var(--ink-faint); font-variant-numeric:tabular-nums; padding-left:6px}
+.drow .dt{font-size:13.5px; min-width:0}
+.drow .dt b{font-weight:600}
+.drow .dt span{color:var(--ink-soft)}
+.check{
+  appearance:none; width:21px; height:21px; border:1px solid var(--rule-hard); background:var(--raised);
+  cursor:pointer; flex:0 0 auto; margin-right:6px; border-radius:2px; position:relative;
+}
+.check[aria-pressed="true"]{background:var(--pass); border-color:var(--pass)}
+.check[aria-pressed="true"]::after{
+  content:''; position:absolute; left:6px; top:2px; width:6px; height:11px;
+  border:solid var(--paper); border-width:0 2px 2px 0; transform:rotate(43deg);
+}
+
+/* ---- notebook ---- */
+.nrow{border-bottom:1px solid var(--rule); padding:13px 0}
+.nq{display:flex; gap:12px; align-items:flex-start}
+.nq .nd{font-family:var(--f-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); flex:0 0 74px; padding-top:3px}
+.nq .nt{flex:1 1 auto; font-size:14.5px; line-height:1.5; min-width:0}
+.nans{margin-top:9px; margin-left:86px; font-size:13.5px; color:var(--ink-soft); line-height:1.6; border-left:2px solid var(--pass); padding-left:12px}
+.nans b{color:var(--ink); font-weight:600}
+@media (max-width:560px){ .nq .nd{flex-basis:100%} .nq{flex-wrap:wrap; gap:5px} .nans{margin-left:0} }
+
+.note{
+  background:var(--raised); border:1px solid var(--rule); border-left:3px solid var(--warn);
+  padding:13px 16px; font-size:13.5px; color:var(--ink-soft); line-height:1.6;
+}
+.note b{color:var(--ink); font-weight:600}
+.hint{font-family:var(--f-mono); font-size:10.5px; letter-spacing:.06em; color:var(--ink-faint); margin-top:14px}
+.center{text-align:center}
+.empty{text-align:center; padding:44px 20px; color:var(--ink-soft)}
+.empty .big{font-family:var(--f-display); font-size:22px; color:var(--ink); margin-bottom:8px}
+@media (max-width:560px){
+  .qtext{font-size:18px}
+  .lrow{grid-template-columns:1fr 84px 50px; gap:10px}
+  .srow{grid-template-columns:1fr; gap:3px}
+  .rcell .v{font-size:23px}
+  .drow{grid-template-columns:44px 1fr auto; gap:9px}
+}
+
+/* ---- plan setup form ---- */
+.field{margin-top:24px}
+.flabel{
+  display:block; font-family:var(--f-mono); font-size:10.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-faint); margin-bottom:9px;
+}
+.finput{
+  font-family:var(--f-mono); font-size:16px; color:var(--ink); background:var(--raised);
+  border:1px solid var(--rule-hard); border-radius:2px; padding:10px 12px; width:100%; max-width:240px;
+  color-scheme:light dark; /* so the native date picker chrome follows the theme */
+}
+.finput:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+.fhint{font-size:12.5px; color:var(--ink-faint); margin:9px 0 0}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.bmin{
+  font-family:var(--f-mono); font-size:10.5px; color:var(--ink-faint);
+  letter-spacing:.05em; margin-left:9px; white-space:nowrap;
+}
+.drow .dt b.testday{color:var(--accent)}
+.drow .dd{white-space:nowrap}
+@media (max-width:560px){ .drow{grid-template-columns:76px 1fr auto} .finput{max-width:100%} }
+
+/* ---- account / sync ---- */
+.brandright{display:flex; flex-direction:column; align-items:flex-end; gap:6px}
+.acct{
+  appearance:none; cursor:pointer; font-family:var(--f-mono); font-size:10px;
+  letter-spacing:.09em; text-transform:uppercase; padding:4px 10px; border-radius:100px;
+  background:transparent; border:1px solid var(--rule-hard); color:var(--ink-soft);
+}
+.acct:hover{border-color:var(--ink-faint); color:var(--ink)}
+.acct.on{border-color:var(--pass); color:var(--pass)}
+.acct.warn{border-color:var(--warn); color:var(--warn)}
+.authform{margin-top:4px; max-width:340px}
+.authform .field{margin-top:18px}
+.authform .finput{max-width:340px}
+@media (max-width:560px){ .brandright{align-items:flex-start} .brandrow{gap:8px} }
+</style>
+
+<header class="masthead">
+  <div class="masthead-in">
+    <div class="brandrow">
+      <div class="brand">The Underwriting <em>Desk</em></div>
+      <div class="brandright">
+        <div class="brand-sub">SAFE MLO National &middot; UST</div>
+        <button class="acct" id="acct" hidden></button>
+      </div>
+    </div>
+    <nav class="rail" id="rail" aria-label="Study modes"></nav>
+  </div>
+</header>
+
+<main class="wrap" id="view"></main>
+
+<script src="bank-1.js"></script>
+<script src="bank-2.js"></script>
+<script src="bank-3.js"></script>
+<script src="bank-4.js"></script>
+<script src="bank-5.js"></script>
+<script src="bank-6.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---------------- exam blueprint ---------------- */
+var DOMAINS = [
+  {k:'orig', name:'Mortgage Loan Origination Activities', short:'Origination', w:27, n:32},
+  {k:'fed',  name:'Federal Mortgage-Related Law',         short:'Federal Law', w:24, n:29},
+  {k:'gen',  name:'General Mortgage Knowledge',            short:'General',     w:20, n:24},
+  {k:'eth',  name:'Ethics',                                short:'Ethics',      w:18, n:22},
+  {k:'ust',  name:'Uniform State Content',                 short:'State (UST)', w:11, n:13}
+];
+var DMAP = {}; DOMAINS.forEach(function(d){ DMAP[d.k] = d; });
+var EXAM_Q = 120, EXAM_SCORED = 115, EXAM_PASS = 86, EXAM_MIN = 190;
+var CLEAR_STREAK = 2;
+
+var BANK = window.QBANK || [];
+var CARDS = window.CARDS || [];
+var QBYID = {}; BANK.forEach(function(q){ QBYID[q.id] = q; });
+
+/* ---------------- storage ---------------- */
+var KEY = 'udesk.v1';
+var S = load();
+function load(){
+  try{
+    var r = JSON.parse(localStorage.getItem(KEY));
+    if(r && r.hist){
+      if(!r.exams) r.exams = [];
+      if(typeof r.cardIdx !== 'number') r.cardIdx = 0;
+      return r;
+    }
+  }catch(e){}
+  return {hist:{}, exams:[], cardIdx:0, plan:null};
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function record(id, ok, mode){
+  var h = S.hist[id] || {a:0,c:0,last:null,streak:0,ever:0};
+  if(typeof h.streak !== 'number') h.streak = 0;
+  if(typeof h.ever !== 'number') h.ever = 0;
+  h.a++;
+  if(ok){ h.c++; h.streak++; h.last = 1; }
+  else { h.streak = 0; h.ever = 1; h.last = 0; }
+  S.hist[id] = h; save();
+  if(window.SYNC) window.SYNC.attempt(id, ok, mode || 'drill');
+}
+function stamp(){ return new Date().toISOString(); }
+
+/* ---------------- scoring ---------------- */
+function domainStats(k){
+  var qs = BANK.filter(function(q){ return q.d === k; });
+  var seen = 0, right = 0;
+  qs.forEach(function(q){
+    var h = S.hist[q.id];
+    if(h && h.last !== null){ seen++; if(h.last === 1) right++; }
+  });
+  return {total:qs.length, seen:seen, right:right, pct: seen ? right/seen : null};
+}
+function readiness(){
+  var wsum = 0, acc = 0, seenAll = 0, totalAll = 0;
+  DOMAINS.forEach(function(d){
+    var s = domainStats(d.k);
+    seenAll += s.seen; totalAll += s.total;
+    if(s.pct !== null){ acc += s.pct * d.w; wsum += d.w; }
+  });
+  return {pct: wsum ? acc/wsum : null, coverage: totalAll ? seenAll/totalAll : 0, answered:seenAll, total:totalAll};
+}
+function band(p){ return p >= .80 ? 'good' : p >= .70 ? 'mid' : 'bad'; }
+function pctTxt(p){ return p === null ? '\u2014' : Math.round(p*100) + '%'; }
+
+/* questions still owed: ever missed and not yet cleared */
+function notebook(){
+  return BANK.filter(function(q){
+    var h = S.hist[q.id];
+    return h && h.ever === 1 && h.streak < CLEAR_STREAK;
+  });
+}
+/* domains ranked by how much a point there is worth: weakness x exam weight */
+function priorities(){
+  return DOMAINS.map(function(d){
+    var s = domainStats(d.k);
+    var weak = s.pct === null ? 1 : 1 - s.pct;
+    return {d:d, s:s, score: weak * d.w};
+  }).sort(function(a,b){ return b.score - a.score; });
+}
+function shuffle(a){
+  a = a.slice();
+  for(var i=a.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+/* serve a question with its answer options in a fresh random order */
+function serve(q){
+  var order = shuffle(q.a.map(function(_, i){ return i; }));
+  return {q:q, o:order, ci:order.indexOf(q.c)};
+}
+function weakPool(limit){
+  var dscore = {};
+  DOMAINS.forEach(function(d){ var s = domainStats(d.k); dscore[d.k] = s.pct === null ? 0 : s.pct; });
+  var scored = BANK.map(function(q){
+    var h = S.hist[q.id];
+    var p = h == null ? 1.0 : (h.ever === 1 && h.streak < CLEAR_STREAK ? 1.6 : (h.last === 0 ? 1.4 : (h.a > 0 && h.c/h.a < .7 ? 0.6 : 0.05)));
+    return {q:q, s: p * (1.3 - dscore[q.d]) + Math.random()*0.25};
+  });
+  scored.sort(function(a,b){ return b.s - a.s; });
+  return scored.slice(0, limit).map(function(x){ return serve(x.q); });
+}
+function buildExam(){
+  var out = [];
+  DOMAINS.forEach(function(d){
+    var pool = shuffle(BANK.filter(function(q){ return q.d === d.k; }));
+    out = out.concat(pool.slice(0, d.n));
+  });
+  return shuffle(out).map(serve);
+}
+
+/* ---------------- shell ---------------- */
+var MODES = [
+  {k:'desk',  label:'Desk'},
+  {k:'plan',  label:'Plan'},
+  {k:'drill', label:'Drill'},
+  {k:'exam',  label:'Mock Exam'},
+  {k:'missed',label:'Missed'},
+  {k:'cards', label:'Cards'},
+  {k:'sheet', label:'Numbers'}
+];
+var mode = 'desk';
+var view = document.getElementById('view');
+
+function renderRail(){
+  var r = document.getElementById('rail');
+  var owed = notebook().length;
+  r.innerHTML = '';
+  MODES.forEach(function(m){
+    var b = document.createElement('button');
+    b.textContent = m.label;
+    if(m.k === 'missed' && owed){
+      var t = document.createElement('span');
+      t.className = 'tag'; t.textContent = owed;
+      b.appendChild(t);
+    }
+    b.setAttribute('aria-current', m.k === mode ? 'true' : 'false');
+    b.onclick = function(){ go(m.k); };
+    r.appendChild(b);
+  });
+}
+function go(m){
+  if(exam.live && m !== 'exam'){
+    if(!confirm('Leave the mock exam? Your progress on it will be lost.')) return;
+    exam.live = false; clearInterval(exam.timer);
+  }
+  mode = m; pager = null; renderRail(); render();
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function el(html){ var d = document.createElement('div'); d.innerHTML = html; return d.firstElementChild; }
+
+function render(){
+  view.innerHTML = '';
+  if(pager) return renderPager();
+  if(mode === 'desk') renderDesk();
+  else if(mode === 'plan') renderPlan();
+  else if(mode === 'drill') renderDrill();
+  else if(mode === 'exam') renderExam();
+  else if(mode === 'account') { if(window.SYNC) renderAuth(); else renderDesk(); }
+  else if(mode === 'missed') renderMissed();
+  else if(mode === 'cards') renderCards();
+  else renderSheet();
+  window.scrollTo(0,0);
+}
+
+/* ---------------- DESK ---------------- */
+function renderDesk(){
+  var r = readiness();
+  var fresh = r.pct === null;
+  var wrap = el('<div class="stack"></div>');
+  var proj = fresh ? null : Math.round(r.pct * EXAM_SCORED);
+
+  var head = el('<section></section>');
+  head.appendChild(el('<p class="eyebrow">Standing</p>'));
+  head.appendChild(el('<h2 class="sec">' + (fresh
+      ? 'Sit a mock exam first'
+      : (r.pct >= .80 ? 'Tracking above the line' : r.pct >= .75 ? 'Just over the line' : 'Below the passing line')) + '</h2>'));
+  head.appendChild(el('<p class="lede">' + (fresh
+      ? 'One full timed run tells you which of the five domains is actually costing you the test \u2014 far more useful than starting over at question one. Every answer is scored into the mastery figures below, and the drill sets pull hardest from whatever is weakest.'
+      : 'Based on ' + r.answered + ' answered ' + (r.answered === 1 ? 'question' : 'questions') + ' weighted by the real exam blueprint. You need ' + EXAM_PASS + ' of ' + EXAM_SCORED + ' scored questions \u2014 75% \u2014 to pass.') + '</p>'));
+
+  var ro = el('<div class="readout"></div>');
+  if(fresh){
+    ro.appendChild(el('<div class="rcell"><div class="k">Score to beat</div><div class="v">' + EXAM_PASS + '<span class="sm">/' + EXAM_SCORED + '</span></div><div class="n">75% of the scored questions</div></div>'));
+    ro.appendChild(el('<div class="rcell"><div class="k">Questions on hand</div><div class="v">' + r.total + '</div><div class="n">Every one with an explanation</div></div>'));
+    ro.appendChild(el('<div class="rcell"><div class="k">Time on the real test</div><div class="v">' + EXAM_MIN + '<span class="sm">min</span></div><div class="n">About 95 seconds per question</div></div>'));
+  } else {
+    ro.appendChild(el('<div class="rcell"><div class="k">Projected score</div><div class="v ' + band(r.pct) + '">' + proj + '<span class="sm">/' + EXAM_SCORED + '</span></div><div class="n">' + (proj >= EXAM_PASS ? (proj - EXAM_PASS) + ' above passing' : (EXAM_PASS - proj) + ' short of passing') + '</div></div>'));
+    ro.appendChild(el('<div class="rcell"><div class="k">Weighted mastery</div><div class="v ' + band(r.pct) + '">' + pctTxt(r.pct) + '</div><div class="n">75% is the pass mark</div></div>'));
+    ro.appendChild(el('<div class="rcell"><div class="k">Bank covered</div><div class="v">' + Math.round(r.coverage*100) + '%</div><div class="n">' + r.answered + ' of ' + r.total + ' questions seen</div></div>'));
+  }
+  head.appendChild(ro);
+  wrap.appendChild(head);
+
+  var led = el('<section></section>');
+  led.appendChild(el('<p class="eyebrow">Mastery by domain &middot; vertical mark is 75%</p>'));
+  led.appendChild(el('<h2 class="sec">Where the exam weight sits</h2>'));
+  var table = el('<div class="ledger"></div>');
+  DOMAINS.forEach(function(d){
+    var s = domainStats(d.k);
+    var row = el('<div class="lrow"></div>');
+    row.appendChild(el('<div class="lname"><b>' + esc(d.name) + '</b><span>' + d.w + '% of exam &middot; ' + d.n + ' questions &middot; ' + s.seen + '/' + s.total + ' seen</span></div>'));
+    var tr = el('<div class="track"><div class="passline"></div></div>');
+    var f = document.createElement('div');
+    f.className = 'fill' + (s.pct === null ? '' : ' ' + band(s.pct));
+    f.style.width = (s.pct === null ? 0 : Math.round(s.pct*100)) + '%';
+    tr.insertBefore(f, tr.firstChild);
+    row.appendChild(tr);
+    row.appendChild(el('<div class="lpct' + (s.pct === null ? ' dim' : '') + '">' + pctTxt(s.pct) + '</div>'));
+    table.appendChild(row);
+  });
+  led.appendChild(table);
+  wrap.appendChild(led);
+
+  var act = el('<section></section>');
+  var br = el('<div class="btnrow"></div>');
+  var bExam = el('<button class="btn' + (fresh ? ' mark' : ' ghost') + '">Take a full mock exam</button>');
+  bExam.onclick = function(){ go('exam'); };
+  var bDrill = el('<button class="btn' + (fresh ? ' ghost' : ' mark') + '">Drill my weak spots</button>');
+  bDrill.onclick = function(){ drill.mode = 'weak'; drill.dom = null; startDrill(); };
+  if(fresh){ br.appendChild(bExam); br.appendChild(bDrill); }
+  else { br.appendChild(bDrill); br.appendChild(bExam); }
+  if(!S.plan){
+    var bPlan = el('<button class="btn ghost">Build a study plan</button>');
+    bPlan.onclick = function(){ go('plan'); };
+    br.appendChild(bPlan);
+  }
+  act.appendChild(br);
+
+  if(!fresh){
+    var worst = priorities()[0];
+    if(worst && worst.s.pct !== null && worst.s.pct < .8){
+      act.appendChild(el('<div class="note" style="margin-top:18px"><b>Weakest area: ' + esc(worst.d.name) + '</b> at ' +
+        pctTxt(worst.s.pct) + '. It carries ' + worst.d.w + '% of the exam \u2014 roughly ' + worst.d.n +
+        ' questions \u2014 so every point you gain here is worth more than a point anywhere else.</div>'));
+    }
+  }
+
+  if(S.exams.length){
+    var h = el('<div style="margin-top:26px"></div>');
+    h.appendChild(el('<p class="eyebrow">Mock exam history</p>'));
+    var tb = el('<div class="ledger"></div>');
+    S.exams.slice().reverse().slice(0,6).forEach(function(x){
+      var ok = x.score >= EXAM_PASS;
+      tb.appendChild(el('<div class="lrow" style="grid-template-columns:1fr auto auto; gap:14px">' +
+        '<div class="lname"><b>' + esc(x.date) + '</b><span>' + x.answered + ' of ' + EXAM_Q + ' answered</span></div>' +
+        '<div class="num" style="font-size:11px;letter-spacing:.1em;color:var(--ink-faint)">' + (ok ? 'PASS' : 'BELOW') + '</div>' +
+        '<div class="lpct" style="color:' + (ok ? 'var(--pass)' : 'var(--accent)') + '">' + x.score + '/' + EXAM_SCORED + '</div></div>'));
+    });
+    h.appendChild(tb);
+    act.appendChild(h);
+  }
+
+  var reset = el('<div style="margin-top:30px"><button class="btn ghost sm">Reset all progress</button></div>');
+  reset.firstElementChild.onclick = function(){
+    if(confirm('Erase every answer, score, mock exam and plan stored on this device?')){
+      S = {hist:{}, exams:[], cardIdx:0, plan:null}; save(); renderRail(); render();
+    }
+  };
+  act.appendChild(reset);
+  wrap.appendChild(act);
+  view.appendChild(wrap);
+}
+
+/* ---------------- STUDY PLAN ---------------- */
+var DAYNAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var TIME_CHOICES = [30, 45, 60, 90, 120, 180];
+
+function startOfDay(d){ d = new Date(d); d.setHours(0,0,0,0); return d; }
+function parseISO(s){ var p = String(s).split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+function toISO(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function addDays(d, n){ var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+function daysUntil(iso){ return Math.round((startOfDay(parseISO(iso)) - startOfDay(new Date())) / 86400000); }
+function fmtDay(d){ return d.toLocaleDateString(undefined, {weekday:'short', month:'short', day:'numeric'}); }
+function fmtMin(m){
+  if(m < 60) return m + ' min';
+  var h = Math.floor(m/60), r = m % 60;
+  return r ? h + ' hr ' + r + ' min' : h + (h === 1 ? ' hour' : ' hours');
+}
+function cardGroups(){
+  var g = []; CARDS.forEach(function(c){ if(g.indexOf(c.g) < 0) g.push(c.g); });
+  return g;
+}
+
+/* fill a session up to the time available, cycling drills against lighter work */
+var BLOCK_MIN = {drill:20, missed:15, cards:10, numbers:10};
+function sessionShape(m){
+  var cycle = ['drill','missed','drill','cards','drill','numbers'];
+  var out = [], left = m, i = 0, guard = 0;
+  while(left >= 10 && guard++ < 40){
+    var k = cycle[i % cycle.length]; i++;
+    if(BLOCK_MIN[k] <= left){ out.push(k); left -= BLOCK_MIN[k]; }
+  }
+  return out.length ? out : ['drill'];
+}
+
+/* spread N drill slots across domains, weakest and heaviest-weighted first */
+function drillAllocation(n){
+  if(n <= 0) return [];
+  var pr = priorities();
+  var w = pr.map(function(x){ return Math.max(x.score, 0.6); });
+  var tot = w.reduce(function(a,b){ return a+b; }, 0);
+  var buckets = pr.map(function(x, i){ return {d:x.d, n: Math.max(1, Math.floor(n * w[i] / tot))}; });
+  var sum = buckets.reduce(function(a,b){ return a + b.n; }, 0), guard = 0;
+  while(sum < n && guard++ < 500){ buckets[sum % buckets.length].n++; sum++; }
+  guard = 0;
+  while(sum > n && guard++ < 500){
+    for(var j = buckets.length - 1; j >= 0 && sum > n; j--){ if(buckets[j].n > 0){ buckets[j].n--; sum--; } }
+  }
+  var out = [], rem = buckets.map(function(b){ return {d:b.d, n:b.n}; });
+  guard = 0;
+  while(out.length < n && guard++ < 1000){
+    var moved = false;
+    for(var k = 0; k < rem.length && out.length < n; k++){
+      if(rem[k].n > 0){ out.push(rem[k].d); rem[k].n--; moved = true; }
+    }
+    if(!moved) break;
+  }
+  return out;
+}
+
+/* the schedule is rebuilt from current mastery every time it is drawn */
+function buildSchedule(){
+  var p = S.plan;
+  var today = startOfDay(new Date());
+  var test = startOfDay(parseISO(p.testDate));
+  var all = [];
+  for(var d = new Date(today); d <= test; d = addDays(d, 1)) all.push(new Date(d));
+  if(!all.length) return [];
+
+  var testDay = all[all.length - 1];
+  var studyDates = all.slice(0, all.length - 1).filter(function(x){ return p.weekdays.indexOf(x.getDay()) >= 0; });
+  var n = studyDates.length;
+
+  var mockIdx = [];
+  function addMock(i){ if(i >= 0 && i < n && mockIdx.indexOf(i) < 0) mockIdx.push(i); }
+  if(n >= 6){ addMock(Math.floor(n*0.20)); addMock(Math.floor(n*0.55)); addMock(n - 3); }
+  else if(n >= 3){ addMock(Math.floor(n*0.4)); addMock(n - 2); }
+  else if(n >= 1){ addMock(0); }
+
+  var taper = [];
+  for(var i = n - 1; i >= 0 && taper.length < 2; i--){ if(mockIdx.indexOf(i) < 0) taper.push(i); }
+
+  var owed = notebook().length;
+  var drillSlots = 0;
+  studyDates.forEach(function(_, i){
+    if(mockIdx.indexOf(i) >= 0 || taper.indexOf(i) >= 0) return;
+    sessionShape(p.minutesPerDay).forEach(function(k){ if(k === 'drill') drillSlots++; });
+  });
+  var alloc = drillAllocation(drillSlots), ai = 0;
+  var cg = cardGroups(), ci = 0;
+
+  var out = studyDates.map(function(date, i){
+    var iso = toISO(date);
+    if(mockIdx.indexOf(i) >= 0){
+      return {date:date, iso:iso, kind:'exam', blocks:[
+        {k:'exam', min:EXAM_MIN, label:'Full timed mock exam', run:{t:'exam'}}
+      ]};
+    }
+    if(taper.indexOf(i) >= 0){
+      var tb = [{k:'numbers', min:12, label:'Read the Numbers sheet end to end', run:{t:'numbers'}}];
+      if(owed) tb.push({k:'missed', min:15, label:'Clear what is left on your Missed list', run:{t:'missed'}});
+      tb.push({k:'cards', min:10, label:'Flashcards \u2014 ' + cg[(ci++) % cg.length], run:{t:'cards'}});
+      return {date:date, iso:iso, kind:'taper', blocks:tb};
+    }
+    var blocks = sessionShape(p.minutesPerDay).map(function(k){
+      if(k === 'drill'){
+        var dm = alloc[ai++] || priorities()[0].d;
+        return {k:'drill', min:20, label:'20-question drill \u2014 ' + dm.name, run:{t:'drill', dom:dm.k}};
+      }
+      if(k === 'cards') return {k:'cards', min:10, label:'Flashcards \u2014 ' + cg[(ci++) % cg.length], run:{t:'cards'}};
+      if(k === 'missed') return owed
+        ? {k:'missed', min:15, label:'Clear your Missed list', run:{t:'missed'}}
+        : {k:'numbers', min:10, label:'Skim the Numbers sheet', run:{t:'numbers'}};
+      return {k:'numbers', min:10, label:'Skim the Numbers sheet', run:{t:'numbers'}};
+    });
+    return {date:date, iso:iso, kind:'study', blocks:blocks};
+  });
+
+  out.push({date:testDay, iso:toISO(testDay), kind:'test', blocks:[]});
+  return out;
+}
+
+function runTask(t){
+  if(t.t === 'exam') go('exam');
+  else if(t.t === 'cards') go('cards');
+  else if(t.t === 'missed') go('missed');
+  else if(t.t === 'numbers') go('sheet');
+  else { drill.mode = 'dom'; drill.dom = t.dom; startDrill(); }
+}
+function blockDone(iso, i){ return !!(S.plan.done && S.plan.done[iso + '.' + i]); }
+function toggleBlock(iso, i){
+  S.plan.done[iso + '.' + i] = !S.plan.done[iso + '.' + i];
+  S.plan.updatedAt = stamp();
+  save(); render();
+  if(window.SYNC) window.SYNC.touch();
+}
+
+/* ---- setup form ---- */
+var setupDraft = null;
+function defaultDraft(){
+  var p = S.plan;
+  return {
+    testDate: (p && p.testDate) || toISO(addDays(new Date(), 25)),
+    minutesPerDay: (p && p.minutesPerDay) || 60,
+    weekdays: (p && p.weekdays) ? p.weekdays.slice() : [1,2,3,4,5,6]
+  };
+}
+function renderPlanSetup(){
+  var d = setupDraft;
+  var editing = !!(S.plan && S.plan.testDate);
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+
+  s.appendChild(el('<p class="eyebrow">' + (editing ? 'Adjust your plan' : 'Build your plan') + '</p>'));
+  s.appendChild(el('<h2 class="sec">' + (editing ? 'Change the shape of it' : 'Fit the work to your calendar') + '</h2>'));
+  s.appendChild(el('<p class="lede">Your first mock exam is scored, so the plan can now be built around the domains that actually cost you points. Tell it when you sit the test and how much time you really have \u2014 not how much you wish you had \u2014 and it will spread the work to fit.</p>'));
+
+  /* test date */
+  var f1 = el('<div class="field"></div>');
+  f1.appendChild(el('<label class="flabel" for="testdate">When is your test?</label>'));
+  var inp = el('<input class="finput" type="date" id="testdate" value="' + d.testDate + '" min="' + toISO(addDays(new Date(),1)) + '">');
+  inp.onchange = function(){ if(inp.value){ d.testDate = inp.value; render(); } };
+  f1.appendChild(inp);
+  var dd = daysUntil(d.testDate);
+  f1.appendChild(el('<p class="fhint">' + (dd > 0 ? dd + ' day' + (dd === 1 ? '' : 's') + ' from today' : 'Pick a date in the future') + '</p>'));
+  s.appendChild(f1);
+
+  /* minutes */
+  var f2 = el('<div class="field"></div>');
+  f2.appendChild(el('<div class="flabel">How long can you study on a study day?</div>'));
+  var c2 = el('<div class="chips"></div>');
+  TIME_CHOICES.forEach(function(m){
+    var b = el('<button class="chip" aria-pressed="' + (d.minutesPerDay === m) + '">' + fmtMin(m) + '</button>');
+    b.onclick = function(){ d.minutesPerDay = m; render(); };
+    c2.appendChild(b);
+  });
+  f2.appendChild(c2);
+  f2.appendChild(el('<p class="fhint">A full mock exam needs ' + EXAM_MIN + ' minutes on its own \u2014 those days are marked, so you can set the time aside.</p>'));
+  s.appendChild(f2);
+
+  /* weekdays */
+  var f3 = el('<div class="field"></div>');
+  f3.appendChild(el('<div class="flabel">Which days can you study?</div>'));
+  var c3 = el('<div class="chips"></div>');
+  DAYNAMES.forEach(function(nm, i){
+    var on = d.weekdays.indexOf(i) >= 0;
+    var b = el('<button class="chip" aria-pressed="' + on + '">' + nm + '</button>');
+    b.onclick = function(){
+      var at = d.weekdays.indexOf(i);
+      if(at >= 0) d.weekdays.splice(at, 1); else d.weekdays.push(i);
+      d.weekdays.sort(); render();
+    };
+    c3.appendChild(b);
+  });
+  f3.appendChild(c3);
+  f3.appendChild(el('<p class="fhint">' + d.weekdays.length + ' day' + (d.weekdays.length === 1 ? '' : 's') + ' a week</p>'));
+  s.appendChild(f3);
+
+  /* preview */
+  var valid = daysUntil(d.testDate) > 0 && d.weekdays.length > 0;
+  if(valid){
+    var saved = S.plan;
+    S.plan = {testDate:d.testDate, minutesPerDay:d.minutesPerDay, weekdays:d.weekdays, done:{}, updatedAt:stamp()};
+    var sched = buildSchedule();
+    S.plan = saved;
+    var sessions = sched.filter(function(x){ return x.kind !== 'test'; });
+    var mocks = sched.filter(function(x){ return x.kind === 'exam'; }).length;
+    var mins = sessions.reduce(function(a, x){ return a + x.blocks.reduce(function(b, y){ return b + y.min; }, 0); }, 0);
+    var focus = {};
+    sched.forEach(function(x){ x.blocks.forEach(function(b){ if(b.run.dom) focus[b.run.dom] = (focus[b.run.dom] || 0) + 1; }); });
+    var top = Object.keys(focus).sort(function(a, b){ return focus[b] - focus[a]; })[0];
+
+    var ro = el('<div class="readout" style="margin-top:26px"></div>');
+    ro.appendChild(el('<div class="rcell"><div class="k">Study sessions</div><div class="v">' + sessions.length + '</div><div class="n">' + mocks + ' of them full mock exams</div></div>'));
+    ro.appendChild(el('<div class="rcell"><div class="k">Total study time</div><div class="v">' + Math.round(mins/60) + '<span class="sm">hr</span></div><div class="n">Before you sit the test</div></div>'));
+    ro.appendChild(el('<div class="rcell"><div class="k">Heaviest focus</div><div class="v" style="font-size:17px;line-height:1.3;padding-top:6px">' + esc(top ? DMAP[top].short : '\u2014') + '</div><div class="n">' + (top ? focus[top] + ' drill sessions' : 'Set after your first exam') + '</div></div>'));
+    s.appendChild(ro);
+  } else {
+    s.appendChild(el('<div class="note" style="margin-top:26px">Pick a test date in the future and at least one day of the week.</div>'));
+  }
+
+  var br = el('<div class="btnrow"></div>');
+  var b1 = el('<button class="btn mark"' + (valid ? '' : ' disabled') + '>' + (editing ? 'Save changes' : 'Build my plan') + '</button>');
+  b1.onclick = function(){
+    if(!valid) return;
+    var keep = (editing && S.plan.done) ? S.plan.done : {};
+    S.plan = {testDate:d.testDate, minutesPerDay:d.minutesPerDay, weekdays:d.weekdays.slice(), done:keep, updatedAt:stamp()};
+    setupDraft = null; save(); render();
+  };
+  br.appendChild(b1);
+  if(editing){
+    var b2 = el('<button class="btn ghost">Cancel</button>');
+    b2.onclick = function(){ setupDraft = null; render(); };
+    br.appendChild(b2);
+  }
+  s.appendChild(br);
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+
+/* ---- plan view ---- */
+function renderPlan(){
+  /* gate: the plan is built from the diagnostic, so it comes after the first exam */
+  if(!S.exams.length){
+    var w0 = el('<div class="stack"></div>');
+    var s0 = el('<section></section>');
+    s0.appendChild(el('<p class="eyebrow">Study plan</p>'));
+    s0.appendChild(el('<h2 class="sec">The diagnostic comes first</h2>'));
+    s0.appendChild(el('<p class="lede">A plan is only worth following if it points at the right material. Sit one full timed mock exam and the scoring will show which of the five domains is actually costing you the test \u2014 then the plan gets built around those, fitted to your test date and the hours you can give it.</p>'));
+    s0.appendChild(el('<div class="note" style="margin-top:20px"><b>It takes ' + EXAM_MIN + ' minutes.</b> Sit it in one go, the way you will sit the real one. Everything you miss is captured and explained afterwards, so the time is not spent only on measurement.</div>'));
+    var br0 = el('<div class="btnrow"></div>');
+    var g0 = el('<button class="btn mark">Take the diagnostic exam</button>');
+    g0.onclick = function(){ go('exam'); };
+    br0.appendChild(g0);
+    s0.appendChild(br0);
+    w0.appendChild(s0); view.appendChild(w0); return;
+  }
+
+  if(setupDraft) return renderPlanSetup();
+  if(!S.plan || !S.plan.testDate){ setupDraft = defaultDraft(); return renderPlanSetup(); }
+
+  var p = S.plan;
+  var left = daysUntil(p.testDate);
+  if(left < 0){
+    var w1 = el('<div class="stack"></div>');
+    var s1 = el('<section></section>');
+    s1.appendChild(el('<p class="eyebrow">Study plan</p>'));
+    s1.appendChild(el('<h2 class="sec">Your test date has passed</h2>'));
+    s1.appendChild(el('<p class="lede">If the test moved, set the new date and the schedule will rebuild around it.</p>'));
+    var br1 = el('<div class="btnrow"></div>');
+    var e1 = el('<button class="btn mark">Set a new test date</button>');
+    e1.onclick = function(){ setupDraft = defaultDraft(); render(); };
+    br1.appendChild(e1);
+    s1.appendChild(br1);
+    w1.appendChild(s1); view.appendChild(w1); return;
+  }
+
+  var sched = buildSchedule();
+  var todayISOv = toISO(new Date());
+  var todayEntry = null;
+  sched.forEach(function(x){ if(x.iso === todayISOv) todayEntry = x; });
+  var upcoming = sched.filter(function(x){ return x.iso > todayISOv; });
+  var next = upcoming[0];
+
+  var sessions = sched.filter(function(x){ return x.kind !== 'test'; });
+  var remainingBlocks = 0, doneBlocks = 0;
+  sessions.forEach(function(x){ x.blocks.forEach(function(_, i){ if(blockDone(x.iso, i)) doneBlocks++; else remainingBlocks++; }); });
+  var mocksLeft = sessions.filter(function(x){ return x.kind === 'exam' && !blockDone(x.iso, 0); }).length;
+
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+
+  s.appendChild(el('<p class="eyebrow">Study plan &middot; ' + fmtMin(p.minutesPerDay) + ' a day &middot; ' + p.weekdays.length + ' days a week</p>'));
+  s.appendChild(el('<h2 class="sec">' + (left === 0 ? 'Test day' : left + ' day' + (left === 1 ? '' : 's') + ' until your test') + '</h2>'));
+  s.appendChild(el('<p class="lede">Sitting ' + esc(parseISO(p.testDate).toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'})) +
+    '. The schedule rebuilds itself from your current mastery every time you open it, so the domain you are weakest in keeps getting the most sessions.</p>'));
+
+  var ro = el('<div class="readout"></div>');
+  ro.appendChild(el('<div class="rcell"><div class="k">Sessions left</div><div class="v">' + sessions.filter(function(x){ return x.iso >= todayISOv; }).length + '</div><div class="n">' + doneBlocks + ' blocks completed</div></div>'));
+  ro.appendChild(el('<div class="rcell"><div class="k">Mock exams left</div><div class="v">' + mocksLeft + '</div><div class="n">' + EXAM_MIN + ' minutes each</div></div>'));
+  var r = readiness();
+  var proj = r.pct === null ? null : Math.round(r.pct * EXAM_SCORED);
+  ro.appendChild(el('<div class="rcell"><div class="k">Projected score</div><div class="v ' + (r.pct === null ? '' : band(r.pct)) + '">' + (proj === null ? '\u2014' : proj + '<span class="sm">/' + EXAM_SCORED + '</span>') + '</div><div class="n">' + (proj === null ? 'No data yet' : (proj >= EXAM_PASS ? (proj - EXAM_PASS) + ' above passing' : (EXAM_PASS - proj) + ' short')) + '</div></div>'));
+  s.appendChild(ro);
+
+  /* today */
+  var td = el('<div class="today"></div>');
+  if(todayEntry && todayEntry.kind === 'test'){
+    td.appendChild(el('<div class="dayno">Today &middot; ' + esc(fmtDay(new Date())) + '</div>'));
+    td.appendChild(el('<h3>This is the day. Go pass it.</h3>'));
+    td.appendChild(el('<p class="lede" style="margin-top:8px">Nothing new goes in today. Read the Numbers sheet once if you want the thresholds fresh, then stop.</p>'));
+    var bt = el('<div class="btnrow"></div>');
+    var nb = el('<button class="btn ghost">Open the Numbers sheet</button>');
+    nb.onclick = function(){ go('sheet'); };
+    bt.appendChild(nb); td.appendChild(bt);
+  } else if(todayEntry){
+    var total = todayEntry.blocks.reduce(function(a, b){ return a + b.min; }, 0);
+    td.appendChild(el('<div class="dayno">Today &middot; ' + esc(fmtDay(new Date())) + ' &middot; about ' + fmtMin(total) + '</div>'));
+    td.appendChild(el('<h3>' + (todayEntry.kind === 'exam' ? 'Mock exam day' : todayEntry.kind === 'taper' ? 'Taper \u2014 review only' : 'Drill and review') + '</h3>'));
+    if(todayEntry.kind === 'exam') td.appendChild(el('<p class="lede" style="margin-top:8px">Set aside ' + EXAM_MIN + ' uninterrupted minutes. Reviewing what you miss afterwards is where the gain is.</p>'));
+    if(todayEntry.kind === 'taper') td.appendChild(el('<p class="lede" style="margin-top:8px">No new material this close to the test. Consolidate what you already know.</p>'));
+    var tl = el('<div class="tasks"></div>');
+    todayEntry.blocks.forEach(function(b, i){
+      var row = el('<div class="task"></div>');
+      var ck = el('<button class="check" aria-pressed="' + blockDone(todayEntry.iso, i) + '" aria-label="Mark done"></button>');
+      ck.onclick = function(){ toggleBlock(todayEntry.iso, i); };
+      row.appendChild(ck);
+      row.appendChild(el('<div class="tl">' + esc(b.label) + '<span class="bmin">' + b.min + ' min</span></div>'));
+      var gb = el('<button class="btn sm">Go</button>');
+      gb.onclick = function(){ runTask(b.run); };
+      row.appendChild(gb);
+      tl.appendChild(row);
+    });
+    td.appendChild(tl);
+  } else {
+    td.appendChild(el('<div class="dayno">Today &middot; ' + esc(fmtDay(new Date())) + '</div>'));
+    td.appendChild(el('<h3>Rest day</h3>'));
+    td.appendChild(el('<p class="lede" style="margin-top:8px">Nothing scheduled. Your next session is ' +
+      (next ? esc(fmtDay(next.date)) : 'not set') + '. Rest days are part of the plan \u2014 but if you have the time anyway, a weak-spot set never hurts.</p>'));
+    var br3 = el('<div class="btnrow"></div>');
+    var eb = el('<button class="btn ghost">Drill anyway</button>');
+    eb.onclick = function(){ drill.mode = 'weak'; drill.dom = null; startDrill(); };
+    br3.appendChild(eb); td.appendChild(br3);
+  }
+  s.appendChild(td);
+
+  /* full docket */
+  var doc = el('<div class="docket"></div>');
+  sched.forEach(function(x){
+    var isToday = x.iso === todayISOv;
+    var past = x.iso < todayISOv;
+    var allDone = x.blocks.length && x.blocks.every(function(_, i){ return blockDone(x.iso, i); });
+    var cls = 'drow' + (isToday ? ' is-today' : (past && !allDone ? ' is-past' : ''));
+    var row = el('<div class="' + cls + '"></div>');
+    row.appendChild(el('<div class="dd">' + esc(fmtDay(x.date).replace(/,/g, '')) + '</div>'));
+
+    var label;
+    if(x.kind === 'test') label = '<b class="testday">Test day</b> <span>&middot; you sit the real exam</span>';
+    else if(x.kind === 'exam') label = '<b>Mock exam</b> <span>&middot; ' + EXAM_MIN + ' minutes, set the time aside</span>';
+    else if(x.kind === 'taper') label = '<b>Taper</b> <span>&middot; numbers and missed list only</span>';
+    else {
+      var doms = [];
+      x.blocks.forEach(function(b){ if(b.run.dom && doms.indexOf(DMAP[b.run.dom].short) < 0) doms.push(DMAP[b.run.dom].short); });
+      label = '<b>' + esc(doms.join(', ')) + '</b> <span>&middot; ' + x.blocks.length + ' blocks</span>';
+    }
+    row.appendChild(el('<div class="dt">' + label + '</div>'));
+    row.appendChild(el('<div class="num" style="font-size:10.5px;letter-spacing:.08em;color:' +
+      (allDone ? 'var(--pass)' : x.kind === 'test' ? 'var(--accent)' : 'var(--ink-faint)') + '">' +
+      (allDone ? 'DONE' : x.kind === 'test' ? 'EXAM' : fmtMin(x.blocks.reduce(function(a,b){ return a + b.min; }, 0))) + '</div>'));
+    doc.appendChild(row);
+  });
+  s.appendChild(doc);
+
+  var br2 = el('<div class="btnrow"></div>');
+  var ab = el('<button class="btn ghost sm">Adjust date, hours or days</button>');
+  ab.onclick = function(){ setupDraft = defaultDraft(); render(); };
+  br2.appendChild(ab);
+  var cb = el('<button class="btn ghost sm">Clear checkmarks</button>');
+  cb.onclick = function(){ if(confirm('Uncheck every completed block? Your scores are not affected.')){ S.plan.done = {}; S.plan.updatedAt = stamp(); save(); render(); } };
+  br2.appendChild(cb);
+  s.appendChild(br2);
+
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+
+/* ---------------- DRILL ---------------- */
+var drill = {mode:'weak', dom:null, queue:[], i:0, answered:null, right:0};
+
+function renderDrill(){
+  if(!drill.queue.length || drill.i >= drill.queue.length) renderDrillSetup();
+  else renderDrillQ();
+}
+function startDrill(){
+  var pool;
+  if(drill.mode === 'weak') pool = weakPool(20);
+  else if(drill.mode === 'book') pool = shuffle(notebook()).slice(0,20).map(serve);
+  else pool = shuffle(BANK.filter(function(q){ return q.d === drill.dom; })).slice(0,20).map(serve);
+  drill.queue = pool; drill.i = 0; drill.answered = null; drill.right = 0;
+  mode = 'drill'; pager = null; renderRail(); render();
+}
+function renderDrillSetup(){
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+  s.appendChild(el('<p class="eyebrow">Practice &middot; 20 questions, answer revealed immediately</p>'));
+
+  if(drill.queue.length && drill.i >= drill.queue.length){
+    var pct = drill.right / drill.queue.length;
+    s.appendChild(el('<h2 class="sec">' + drill.right + ' of ' + drill.queue.length + ' correct</h2>'));
+    s.appendChild(el('<p class="lede">' + (pct >= .8
+      ? 'Strong set. Your mastery figures have been updated.'
+      : pct >= .6 ? 'Middling. Anything you missed is now on your Missed list \u2014 clear it before the next mock.'
+      : 'Rough set, which means it found real gaps. That is what it is for. Everything you missed is waiting on the Missed tab.') + '</p>'));
+  } else {
+    s.appendChild(el('<h2 class="sec">Pick what to drill</h2>'));
+    s.appendChild(el('<p class="lede">Weak spots pulls from what you have missed and never seen, biased toward your lowest-scoring domains. Or work a single domain straight through. Answer positions are shuffled every time, so you cannot memorize the letter.</p>'));
+  }
+
+  var chips = el('<div class="chips"></div>');
+  var cw = el('<button class="chip">Weak spots<span class="c">20</span></button>');
+  cw.onclick = function(){ drill.mode='weak'; drill.dom=null; startDrill(); };
+  chips.appendChild(cw);
+  DOMAINS.forEach(function(d){
+    var st = domainStats(d.k);
+    var c = el('<button class="chip">' + esc(d.short) + '<span class="c">' + pctTxt(st.pct) + '</span></button>');
+    c.title = d.name;
+    c.onclick = function(){ drill.mode='dom'; drill.dom=d.k; startDrill(); };
+    chips.appendChild(c);
+  });
+  s.appendChild(chips);
+
+  var br = el('<div class="btnrow"></div>');
+  var b = el('<button class="btn">Start a weak-spot set</button>');
+  b.onclick = function(){ drill.mode='weak'; drill.dom=null; startDrill(); };
+  br.appendChild(b);
+  var b2 = el('<button class="btn ghost">Back to the desk</button>');
+  b2.onclick = function(){ go('desk'); };
+  br.appendChild(b2);
+  s.appendChild(br);
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+function renderDrillQ(){
+  var item = drill.queue[drill.i], q = item.q;
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+
+  s.appendChild(el('<div class="qmeta"><span class="dom">' + esc(DMAP[q.d].name) + '</span>' +
+    '<span>' + esc(q.t) + ' &middot; ' + (drill.i+1) + ' of ' + drill.queue.length + ' &middot; ' + drill.right + ' right</span></div>'));
+  var pb = el('<div class="pbar"><i></i></div>');
+  pb.firstElementChild.style.width = Math.round(drill.i/drill.queue.length*100) + '%';
+  s.appendChild(pb);
+  s.appendChild(el('<div class="qtext">' + esc(q.q) + '</div>'));
+
+  var opts = el('<div class="opts"></div>');
+  item.o.forEach(function(orig, i){
+    var b = el('<button class="opt"><span class="ltr">' + 'ABCD'[i] + '</span><span>' + esc(q.a[orig]) + '</span></button>');
+    if(drill.answered !== null){
+      b.disabled = true;
+      if(i === item.ci) b.className += ' correct';
+      else if(i === drill.answered) b.className += ' wrong';
+      if(i === drill.answered) b.className += ' picked';
+    } else {
+      b.onclick = function(){ answerDrill(i); };
+    }
+    opts.appendChild(b);
+  });
+  s.appendChild(opts);
+
+  if(drill.answered !== null){
+    var ok = drill.answered === item.ci;
+    s.appendChild(el('<div class="why' + (ok ? ' right' : '') + '"><div class="verdict">' +
+      (ok ? 'Correct' : 'Correct answer: ' + 'ABCD'[item.ci]) + '</div><p>' + esc(q.e) + '</p></div>'));
+    var br = el('<div class="btnrow"></div>');
+    var nb = el('<button class="btn">' + (drill.i+1 >= drill.queue.length ? 'Finish set' : 'Next question') + '</button>');
+    nb.onclick = nextDrill;
+    br.appendChild(nb);
+    s.appendChild(br);
+    s.appendChild(el('<p class="hint">Press Enter for the next question</p>'));
+  } else {
+    s.appendChild(el('<p class="hint">Press 1-4 to answer</p>'));
+  }
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+function answerDrill(i){
+  var item = drill.queue[drill.i];
+  drill.answered = i;
+  if(i === item.ci) drill.right++;
+  record(item.q.id, i === item.ci, drill.mode === 'book' ? 'notebook' : 'drill');
+  renderRail();
+  render();
+}
+function nextDrill(){ drill.i++; drill.answered = null; render(); }
+
+/* ---------------- MOCK EXAM ---------------- */
+var exam = {live:false, qs:[], ans:[], i:0, endAt:0, timer:null, done:null};
+
+function renderExam(){
+  if(exam.done) return renderExamResult();
+  if(!exam.live) return renderExamIntro();
+  renderExamQ();
+}
+function renderExamIntro(){
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+  s.appendChild(el('<p class="eyebrow">Simulated SAFE MLO National Test with UST</p>'));
+  s.appendChild(el('<h2 class="sec">' + EXAM_Q + ' questions. ' + EXAM_MIN + ' minutes. No answers until you submit.</h2>'));
+  s.appendChild(el('<p class="lede">Questions are drawn at the real blueprint weights and answer positions are shuffled. Sit it the way you will sit the real one: phone face down, no notes, one pass through. Afterwards you can review every question you missed.</p>'));
+
+  var ro = el('<div class="readout" style="margin-top:20px"></div>');
+  ro.appendChild(el('<div class="rcell"><div class="k">To pass</div><div class="v">' + EXAM_PASS + '<span class="sm">/' + EXAM_SCORED + '</span></div><div class="n">75% of scored questions</div></div>'));
+  ro.appendChild(el('<div class="rcell"><div class="k">Time limit</div><div class="v">' + EXAM_MIN + '<span class="sm">min</span></div><div class="n">About 95 seconds per question</div></div>'));
+  ro.appendChild(el('<div class="rcell"><div class="k">Unscored</div><div class="v">5</div><div class="n">Pretest items, unmarked</div></div>'));
+  s.appendChild(ro);
+
+  var br = el('<div class="btnrow"></div>');
+  var b = el('<button class="btn mark">Begin the exam</button>');
+  b.onclick = startExam;
+  br.appendChild(b);
+  s.appendChild(br);
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+function startExam(){
+  exam.qs = buildExam();
+  exam.ans = new Array(exam.qs.length).fill(null);
+  exam.i = 0; exam.live = true; exam.done = null;
+  exam.endAt = Date.now() + EXAM_MIN*60*1000;
+  clearInterval(exam.timer);
+  exam.timer = setInterval(tick, 1000);
+  render();
+}
+function tick(){
+  if(!exam.live) return clearInterval(exam.timer);
+  var left = exam.endAt - Date.now();
+  if(left <= 0){ clearInterval(exam.timer); return submitExam(true); }
+  var c = document.getElementById('clock');
+  if(c){
+    var t = Math.floor(left/1000);
+    var h = Math.floor(t/3600), m = Math.floor(t%3600/60), sec = t%60;
+    c.textContent = (h ? h + ':' : '') + String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+    c.className = 'clock' + (left < 10*60*1000 ? ' low' : '');
+  }
+}
+function renderExamQ(){
+  var item = exam.qs[exam.i], q = item.q;
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+
+  s.appendChild(el('<div class="exambar"><div><div class="lab">Time remaining</div><div class="clock" id="clock">--:--</div></div>' +
+    '<div style="text-align:right"><div class="lab">Question</div><div class="clock">' + (exam.i+1) + '<span class="sm"> / ' + exam.qs.length + '</span></div></div></div>'));
+  var pb = el('<div class="pbar"><i></i></div>');
+  pb.firstElementChild.style.width = Math.round(exam.i/exam.qs.length*100) + '%';
+  s.appendChild(pb);
+  s.appendChild(el('<div class="qtext">' + esc(q.q) + '</div>'));
+
+  var opts = el('<div class="opts"></div>');
+  item.o.forEach(function(orig, i){
+    var b = el('<button class="opt' + (exam.ans[exam.i] === i ? ' picked' : '') + '"><span class="ltr">' + 'ABCD'[i] + '</span><span>' + esc(q.a[orig]) + '</span></button>');
+    b.onclick = function(){ exam.ans[exam.i] = i; render(); };
+    opts.appendChild(b);
+  });
+  s.appendChild(opts);
+
+  var br = el('<div class="btnrow"></div>');
+  if(exam.i > 0){
+    var pv = el('<button class="btn ghost">Previous</button>');
+    pv.onclick = function(){ exam.i--; render(); };
+    br.appendChild(pv);
+  }
+  if(exam.i < exam.qs.length - 1){
+    var nx = el('<button class="btn">' + (exam.ans[exam.i] === null ? 'Skip' : 'Next') + '</button>');
+    nx.onclick = function(){ exam.i++; render(); };
+    br.appendChild(nx);
+  }
+  var sub = el('<button class="btn mark">Submit exam</button>');
+  sub.onclick = function(){
+    var blank = exam.ans.filter(function(a){ return a === null; }).length;
+    var msg = blank ? blank + ' questions are still blank and will be scored wrong. Submit anyway?' : 'Submit for scoring?';
+    if(confirm(msg)) submitExam(false);
+  };
+  br.appendChild(sub);
+  s.appendChild(br);
+  s.appendChild(el('<p class="hint">Press 1-4 to answer &middot; Enter for next</p>'));
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+  tick();
+}
+function submitExam(timeUp){
+  clearInterval(exam.timer);
+  exam.live = false;
+  var byDom = {}, right = 0, answered = 0, missed = [];
+  DOMAINS.forEach(function(d){ byDom[d.k] = {r:0, n:0}; });
+  exam.qs.forEach(function(item, i){
+    var ok = exam.ans[i] === item.ci;
+    if(exam.ans[i] !== null) answered++;
+    record(item.q.id, ok, 'exam');
+    if(ok) right++; else missed.push({item:item, picked:exam.ans[i]});
+    byDom[item.q.d].n++; if(ok) byDom[item.q.d].r++;
+  });
+  var scored = Math.round(right / exam.qs.length * EXAM_SCORED);
+  exam.done = {score:scored, raw:right, byDom:byDom, answered:answered, timeUp:!!timeUp, missed:missed};
+  S.exams.push({date:new Date().toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}), score:scored, answered:answered});
+  if(window.SYNC) window.SYNC.exam({score:scored, raw:right, answered:answered, byDomain:byDom});
+  save(); renderRail(); render();
+}
+function renderExamResult(){
+  var d = exam.done, ok = d.score >= EXAM_PASS;
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+
+  s.appendChild(el('<div class="stampwrap"><div class="stamp' + (ok ? ' ok' : '') + '">' +
+    (ok ? 'Passing Score' : 'Below Passing') + '<small>' + d.score + ' of ' + EXAM_SCORED + ' &middot; ' + EXAM_PASS + ' required</small></div></div>'));
+  s.appendChild(el('<h2 class="sec center" style="margin-top:14px">' +
+    (ok ? 'That would have been a pass.' : 'Short by ' + (EXAM_PASS - d.score) + '.') + '</h2>'));
+  s.appendChild(el('<p class="lede center" style="margin-left:auto;margin-right:auto">' +
+    (d.timeUp ? 'Time expired. ' : '') +
+    'You answered ' + d.raw + ' of ' + exam.qs.length + ' correctly' +
+    (d.answered < exam.qs.length ? ', leaving ' + (exam.qs.length - d.answered) + ' blank' : '') +
+    '. Scaled to the ' + EXAM_SCORED + ' scored questions on the real test, that is ' + d.score + '.</p>'));
+
+  var led = el('<div class="ledger" style="margin-top:26px"></div>');
+  DOMAINS.forEach(function(dm){
+    var b = d.byDom[dm.k], p = b.n ? b.r/b.n : 0;
+    var row = el('<div class="lrow"></div>');
+    row.appendChild(el('<div class="lname"><b>' + esc(dm.name) + '</b><span>' + b.r + ' of ' + b.n + ' &middot; ' + dm.w + '% of exam</span></div>'));
+    var tr = el('<div class="track"><div class="passline"></div></div>');
+    var f = document.createElement('div');
+    f.className = 'fill ' + band(p);
+    f.style.width = Math.round(p*100) + '%';
+    tr.insertBefore(f, tr.firstChild);
+    row.appendChild(tr);
+    row.appendChild(el('<div class="lpct">' + Math.round(p*100) + '%</div>'));
+    led.appendChild(row);
+  });
+  s.appendChild(led);
+
+  var worst = DOMAINS.map(function(dm){ var b = d.byDom[dm.k]; return {dm:dm, p: b.n ? b.r/b.n : 0}; })
+    .sort(function(a,b){ return a.p - b.p; })[0];
+  s.appendChild(el('<div class="note" style="margin-top:20px"><b>Start here: ' + esc(worst.dm.name) + '</b> at ' +
+    Math.round(worst.p*100) + '%. All ' + d.missed.length + ' questions you missed have been added to your Missed list, and will keep reappearing until you answer each one correctly twice.</div>'));
+
+  var br = el('<div class="btnrow"></div>');
+  if(d.missed.length){
+    var b0 = el('<button class="btn mark">Review the ' + d.missed.length + ' you missed</button>');
+    b0.onclick = function(){ openPager(d.missed, 'Exam review', function(){ exam.done = null; go('desk'); }); };
+    br.appendChild(b0);
+  }
+  var b1 = el('<button class="btn ghost">Drill the weak spots</button>');
+  b1.onclick = function(){ exam.done = null; drill.mode='weak'; drill.dom=null; startDrill(); };
+  var b2 = el('<button class="btn ghost">Back to the desk</button>');
+  b2.onclick = function(){ exam.done = null; go('desk'); };
+  br.appendChild(b1); br.appendChild(b2);
+  s.appendChild(br);
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+
+/* ---------------- REVIEW PAGER ---------------- */
+var pager = null;
+function openPager(entries, title, onDone){
+  pager = {list:entries, i:0, title:title, onDone:onDone};
+  render();
+}
+function renderPager(){
+  var e = pager.list[pager.i], item = e.item, q = item.q;
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+
+  s.appendChild(el('<div class="qmeta"><span class="dom">' + esc(DMAP[q.d].name) + '</span>' +
+    '<span>' + esc(pager.title) + ' &middot; ' + (pager.i+1) + ' of ' + pager.list.length + '</span></div>'));
+  var pb = el('<div class="pbar"><i></i></div>');
+  pb.firstElementChild.style.width = Math.round((pager.i+1)/pager.list.length*100) + '%';
+  s.appendChild(pb);
+  s.appendChild(el('<div class="qtext">' + esc(q.q) + '</div>'));
+
+  var opts = el('<div class="opts"></div>');
+  item.o.forEach(function(orig, i){
+    var cls = 'opt';
+    if(i === item.ci) cls += ' correct';
+    else if(i === e.picked) cls += ' wrong picked';
+    var b = el('<button class="' + cls + '" disabled><span class="ltr">' + 'ABCD'[i] + '</span><span>' + esc(q.a[orig]) + '</span></button>');
+    opts.appendChild(b);
+  });
+  s.appendChild(opts);
+  s.appendChild(el('<div class="why"><div class="verdict">' +
+    (e.picked === null || e.picked === undefined ? 'Left blank \u2014 correct answer: ' : 'You chose ' + 'ABCD'[e.picked] + ' \u2014 correct answer: ') +
+    'ABCD'[item.ci] + '</div><p>' + esc(q.e) + '</p></div>'));
+
+  var br = el('<div class="btnrow"></div>');
+  if(pager.i > 0){
+    var pv = el('<button class="btn ghost">Previous</button>');
+    pv.onclick = function(){ pager.i--; render(); };
+    br.appendChild(pv);
+  }
+  if(pager.i < pager.list.length - 1){
+    var nx = el('<button class="btn">Next</button>');
+    nx.onclick = function(){ pager.i++; render(); };
+    br.appendChild(nx);
+  } else {
+    var fin = el('<button class="btn">Done reviewing</button>');
+    fin.onclick = function(){ var f = pager.onDone; pager = null; if(f) f(); else render(); };
+    br.appendChild(fin);
+  }
+  var ex = el('<button class="btn ghost">Close review</button>');
+  ex.onclick = function(){ var f = pager.onDone; pager = null; if(f) f(); else render(); };
+  br.appendChild(ex);
+  s.appendChild(br);
+  s.appendChild(el('<p class="hint">Arrow keys to move</p>'));
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+
+/* ---------------- MISSED NOTEBOOK ---------------- */
+function renderMissed(){
+  var owed = notebook();
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+
+  if(!owed.length){
+    s.appendChild(el('<p class="eyebrow">Missed list</p>'));
+    s.appendChild(el('<div class="empty"><div class="big">Nothing owed.</div>' +
+      'Every question you have missed has since been answered correctly twice. Anything you miss from here lands on this list until you clear it the same way.</div>'));
+    var br0 = el('<div class="btnrow" style="justify-content:center"></div>');
+    var g = el('<button class="btn ghost">Back to the desk</button>');
+    g.onclick = function(){ go('desk'); };
+    br0.appendChild(g);
+    s.appendChild(br0);
+    wrap.appendChild(s); view.appendChild(wrap); return;
+  }
+
+  var byDom = {};
+  owed.forEach(function(q){ (byDom[q.d] = byDom[q.d] || []).push(q); });
+
+  s.appendChild(el('<p class="eyebrow">Missed list &middot; ' + owed.length + ' open</p>'));
+  s.appendChild(el('<h2 class="sec">What you still owe</h2>'));
+  s.appendChild(el('<p class="lede">Every question you have gotten wrong, with the right answer and why. A question leaves this list once you have answered it correctly twice \u2014 once is luck.</p>'));
+
+  var br = el('<div class="btnrow"></div>');
+  var qb = el('<button class="btn mark">Quiz me on these ' + Math.min(20, owed.length) + '</button>');
+  qb.onclick = function(){ drill.mode = 'book'; drill.dom = null; startDrill(); };
+  br.appendChild(qb);
+  var rb = el('<button class="btn ghost">Read them through</button>');
+  rb.onclick = function(){
+    openPager(shuffle(owed).map(function(q){ return {item:serve(q), picked:null}; }), 'Missed list', function(){ go('missed'); });
+  };
+  br.appendChild(rb);
+  s.appendChild(br);
+
+  DOMAINS.forEach(function(d){
+    var list = byDom[d.k];
+    if(!list || !list.length) return;
+    var grp = el('<div class="sgroup" style="margin-top:26px"></div>');
+    grp.appendChild(el('<h3>' + esc(d.name) + ' &middot; ' + list.length + '</h3>'));
+    list.forEach(function(q){
+      var h = S.hist[q.id];
+      var row = el('<div class="nrow"></div>');
+      row.appendChild(el('<div class="nq"><div class="nd">' + esc(q.t) + '</div><div class="nt">' + esc(q.q) + '</div></div>'));
+      row.appendChild(el('<div class="nans"><b>' + esc(q.a[q.c]) + '</b><br>' + esc(q.e) +
+        (h.streak === 1 ? '<br><span style="color:var(--pass)">Answered right once \u2014 one more clears it.</span>' : '') + '</div>'));
+      grp.appendChild(row);
+    });
+    s.appendChild(grp);
+  });
+
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+
+/* ---------------- CARDS ---------------- */
+var flipped = false;
+function renderCards(){
+  if(S.cardIdx >= CARDS.length) S.cardIdx = 0;
+  var c = CARDS[S.cardIdx];
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+  s.appendChild(el('<p class="eyebrow">Flashcards &middot; ' + (S.cardIdx+1) + ' of ' + CARDS.length + '</p>'));
+  s.appendChild(el('<h2 class="sec">The figures that decide the test</h2>'));
+  s.appendChild(el('<p class="lede">Most missed questions on the SAFE exam are a date, a percentage, or a threshold. These are the ones worth knowing cold.</p>'));
+
+  var card = el('<div class="card" style="margin-top:20px" tabindex="0" role="button" aria-label="Flip card"></div>');
+  card.appendChild(el('<div class="grp">' + esc(c.g) + '</div>'));
+  card.appendChild(el('<div class="front">' + esc(c.f) + '</div>'));
+  if(flipped) card.appendChild(el('<div class="back">' + esc(c.b) + '</div>'));
+  else card.appendChild(el('<div class="tap">Tap to reveal</div>'));
+  card.onclick = function(){ flipped = !flipped; render(); };
+  card.onkeydown = function(ev){ if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); flipped = !flipped; render(); } };
+  s.appendChild(card);
+
+  var br = el('<div class="btnrow"></div>');
+  var p = el('<button class="btn ghost">Previous</button>');
+  p.onclick = function(){ S.cardIdx = (S.cardIdx - 1 + CARDS.length) % CARDS.length; flipped = false; save(); render(); };
+  var n = el('<button class="btn">Next card</button>');
+  n.onclick = function(){ S.cardIdx = (S.cardIdx + 1) % CARDS.length; flipped = false; save(); render(); };
+  var sh = el('<button class="btn ghost">Shuffle</button>');
+  sh.onclick = function(){ S.cardIdx = Math.floor(Math.random()*CARDS.length); flipped = false; save(); render(); };
+  br.appendChild(p); br.appendChild(n); br.appendChild(sh);
+  s.appendChild(br);
+  s.appendChild(el('<p class="hint">Space flips &middot; arrow keys move</p>'));
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+
+/* ---------------- SHEET ---------------- */
+function renderSheet(){
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+  s.appendChild(el('<p class="eyebrow">Reference &middot; ' + CARDS.length + ' entries</p>'));
+  s.appendChild(el('<h2 class="sec">Numbers to know cold</h2>'));
+  s.appendChild(el('<p class="lede">The same set as the flashcards, laid out to read straight through the morning of the exam.</p>'));
+
+  var sheet = el('<div class="sheet"></div>');
+  cardGroups().forEach(function(g){
+    var sec = el('<div class="sgroup"></div>');
+    sec.appendChild(el('<h3>' + esc(g) + '</h3>'));
+    CARDS.filter(function(c){ return c.g === g; }).forEach(function(c){
+      sec.appendChild(el('<div class="srow"><b>' + esc(c.f) + '</b><span>' + esc(c.b) + '</span></div>'));
+    });
+    sheet.appendChild(sec);
+  });
+  s.appendChild(sheet);
+  wrap.appendChild(s);
+  view.appendChild(wrap);
+}
+
+/* ---------------- keyboard ---------------- */
+document.addEventListener('keydown', function(e){
+  if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  var k = e.key;
+  if(pager){
+    if(k === 'ArrowRight' && pager.i < pager.list.length - 1){ e.preventDefault(); pager.i++; render(); }
+    else if(k === 'ArrowLeft' && pager.i > 0){ e.preventDefault(); pager.i--; render(); }
+    return;
+  }
+  if(mode === 'drill' && drill.queue.length && drill.i < drill.queue.length){
+    if(drill.answered === null && k >= '1' && k <= '4'){
+      var i = +k - 1;
+      if(i < drill.queue[drill.i].o.length){ e.preventDefault(); answerDrill(i); }
+    } else if(drill.answered !== null && (k === 'Enter' || k === ' ')){ e.preventDefault(); nextDrill(); }
+  } else if(mode === 'exam' && exam.live){
+    if(k >= '1' && k <= '4'){
+      var j = +k - 1;
+      if(j < exam.qs[exam.i].o.length){ e.preventDefault(); exam.ans[exam.i] = j; render(); }
+    } else if(k === 'Enter' && exam.i < exam.qs.length - 1){ e.preventDefault(); exam.i++; render(); }
+    else if(k === 'ArrowLeft' && exam.i > 0){ e.preventDefault(); exam.i--; render(); }
+  } else if(mode === 'cards'){
+    if(k === ' '){ e.preventDefault(); flipped = !flipped; render(); }
+    else if(k === 'ArrowRight'){ S.cardIdx = (S.cardIdx+1) % CARDS.length; flipped = false; save(); render(); }
+    else if(k === 'ArrowLeft'){ S.cardIdx = (S.cardIdx-1+CARDS.length) % CARDS.length; flipped = false; save(); render(); }
+  }
+});
+
+window.addEventListener('beforeunload', function(e){
+  if(exam.live){ e.preventDefault(); e.returnValue = ''; }
+});
+
+/* ---------------- account + sync bridge ----------------
+   sync.js is only present in the self-hosted build. Everything below is inert
+   without it, so the published artifact keeps working on localStorage alone. */
+window.UDESK = {
+  getState: function(){ return S; },
+  setState: function(next){ if(next) S = next; save(); renderRail(); render(); },
+  rerender: function(){ renderRail(); render(); },
+  onSyncChange: function(st){ renderAccount(st); }
+};
+
+function renderAccount(st){
+  var b = document.getElementById('acct');
+  if(!b) return;
+  if(!window.SYNC){ b.hidden = true; return; }
+  st = st || window.SYNC.state();
+  b.hidden = false;
+  var label, cls = 'acct';
+  if(!st.user){ label = 'Sign in to sync'; }
+  else if(st.status === 'syncing'){ cls += ' on'; label = 'Syncing\u2026'; }
+  else if(st.status === 'offline'){ cls += ' warn'; label = 'Offline' + (st.pending ? ' \u00b7 ' + st.pending + ' queued' : ''); }
+  else { cls += ' on'; label = 'Synced'; }
+  b.className = cls;
+  b.textContent = label;
+  b.onclick = function(){ go('account'); };
+}
+
+var authBusy = false, authError = '', authMode = 'login';
+function renderAuth(){
+  var st = window.SYNC.state();
+  var wrap = el('<div class="stack"></div>');
+  var s = el('<section></section>');
+
+  if(st.user){
+    s.appendChild(el('<p class="eyebrow">Account</p>'));
+    s.appendChild(el('<h2 class="sec">Signed in as ' + esc(st.user.email) + '</h2>'));
+    s.appendChild(el('<p class="lede">Your answers, mock exams and study plan sync to this server, so picking up on another device carries everything across. Progress is saved locally first \u2014 you can study with no signal and it will catch up when you are back online.</p>'));
+    var ro = el('<div class="readout" style="margin-top:22px"></div>');
+    ro.appendChild(el('<div class="rcell"><div class="k">Status</div><div class="v" style="font-size:19px;padding-top:5px">' +
+      (st.status === 'synced' ? 'Up to date' : st.status === 'syncing' ? 'Syncing' : 'Offline') + '</div><div class="n">' +
+      (st.pending ? st.pending + ' waiting to upload' : 'Nothing queued') + '</div></div>'));
+    ro.appendChild(el('<div class="rcell"><div class="k">Answers recorded</div><div class="v">' + Object.keys(S.hist).length + '</div><div class="n">Distinct questions seen</div></div>'));
+    ro.appendChild(el('<div class="rcell"><div class="k">Mock exams</div><div class="v">' + S.exams.length + '</div><div class="n">Stored on the server</div></div>'));
+    s.appendChild(ro);
+
+    var br = el('<div class="btnrow"></div>');
+    var sn = el('<button class="btn">Sync now</button>');
+    sn.onclick = function(){ window.SYNC.flushNow().then(function(){ render(); }); };
+    var so = el('<button class="btn ghost">Sign out</button>');
+    so.onclick = function(){
+      if(confirm('Sign out? Your progress stays on this device and on the server.')) window.SYNC.logout();
+    };
+    var bk = el('<button class="btn ghost">Back to the desk</button>');
+    bk.onclick = function(){ go('desk'); };
+    br.appendChild(sn); br.appendChild(so); br.appendChild(bk);
+    s.appendChild(br);
+    wrap.appendChild(s); view.appendChild(wrap); return;
+  }
+
+  var creating = authMode === 'signup' && st.signupOpen;
+  s.appendChild(el('<p class="eyebrow">Account</p>'));
+  s.appendChild(el('<h2 class="sec">' + (creating ? 'Create your account' : 'Sign in to sync') + '</h2>'));
+  s.appendChild(el('<p class="lede">' + (creating
+    ? 'One account, so your progress follows you between your phone and your laptop. Pick a password of at least 10 characters.'
+    : 'Signing in links this device to your progress. You can also keep using the app signed out \u2014 everything still works, it just stays on this device.') + '</p>'));
+
+  var form = el('<form class="authform"></form>');
+  var f1 = el('<div class="field"><label class="flabel" for="em">Email</label></div>');
+  var em = el('<input class="finput" id="em" type="email" autocomplete="username" required>');
+  f1.appendChild(em); form.appendChild(f1);
+  var f2 = el('<div class="field"><label class="flabel" for="pw">Password</label></div>');
+  var pw = el('<input class="finput" id="pw" type="password" autocomplete="' + (creating ? 'new-password' : 'current-password') + '" required>');
+  f2.appendChild(pw); form.appendChild(f2);
+  if(authError) form.appendChild(el('<div class="note" style="margin-top:20px;border-left-color:var(--accent)">' + esc(authError) + '</div>'));
+
+  var br2 = el('<div class="btnrow"></div>');
+  var go1 = el('<button class="btn mark" type="submit"' + (authBusy ? ' disabled' : '') + '>' + (authBusy ? 'Working\u2026' : creating ? 'Create account' : 'Sign in') + '</button>');
+  br2.appendChild(go1);
+  var bk2 = el('<button class="btn ghost" type="button">Keep studying without an account</button>');
+  bk2.onclick = function(){ go('desk'); };
+  br2.appendChild(bk2);
+  form.appendChild(br2);
+
+  form.onsubmit = function(ev){
+    ev.preventDefault();
+    if(authBusy) return;
+    authBusy = true; authError = ''; render();
+    var fn = creating ? window.SYNC.signup : window.SYNC.login;
+    fn(em.value, pw.value)
+      .then(function(){ authBusy = false; go('desk'); })
+      .catch(function(err){ authBusy = false; authError = err.message || 'Could not sign in.'; render(); });
+  };
+  s.appendChild(form);
+
+  if(st.signupOpen){
+    var sw = el('<p class="hint" style="margin-top:18px"><a href="#" style="color:var(--accent)">' +
+      (creating ? 'I already have an account' : 'No account on this server yet \u2014 create one') + '</a></p>');
+    sw.firstElementChild.onclick = function(ev){ ev.preventDefault(); authMode = creating ? 'login' : 'signup'; authError = ''; render(); };
+    s.appendChild(sw);
+  }
+  wrap.appendChild(s); view.appendChild(wrap);
+}
+
+renderRail();
+render();
+if(window.SYNC){
+  renderAccount();
+  window.SYNC.init().then(function(){ renderAccount(); renderRail(); render(); });
+}
+})();
+</script>

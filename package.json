@@ -1,0 +1,37 @@
+{
+  "name": "mlo-prep",
+  "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "description": "SAFE MLO exam prep - static study app with a SQLite sync backend",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "build:pages": "node build.mjs --static --out docs",
+    "dev": "node build.mjs && tsx watch server/index.ts",
+    "start": "NODE_ENV=production tsx server/index.ts",
+    "user:create": "tsx scripts/create-user.ts",
+    "user:passwd": "tsx scripts/set-password.ts",
+    "backup": "tsx scripts/backup.ts",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "tsx": "^4.20.6"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/express": "^5.0.1",
+    "@types/node": "^24.12.3",
+    "typescript": "~6.0.2"
+  }
+}

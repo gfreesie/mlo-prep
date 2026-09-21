@@ -1,0 +1,42 @@
+[Unit]
+Description=MLO Prep (The Underwriting Desk)
+Documentation=https://studyprep.ssopros.com/healthz
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=mloprep
+Group=mloprep
+WorkingDirectory=/srv/mlo-prep/current
+Environment=NODE_ENV=production
+Environment=PORT=8080
+Environment=DATABASE_PATH=/srv/mlo-prep/data/mloprep.sqlite
+# Signups close once the account exists; flip to false to close them outright.
+Environment=ALLOW_SIGNUP=true
+ExecStart=/srv/mlo-prep/current/node_modules/.bin/tsx server/index.ts
+Restart=always
+RestartSec=3
+
+# --- hardening: the process only needs to read its code and write its database
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ReadWritePaths=/srv/mlo-prep/data /srv/mlo-prep/backups
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=false
+SystemCallArchitectures=native
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mlo-prep
+
+[Install]
+WantedBy=multi-user.target
